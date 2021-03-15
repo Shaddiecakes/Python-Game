@@ -1,0 +1,112 @@
+# Dawner Lopez
+
+# Intro
+print(' Welcome to the Dragon Text Adventure Game')
+print('Collect all 6 items and reach the boss to win the game or face being cast into outer space!')
+print('Movement is done through typing between up, down, left, and right. Type exit to quit.')
+print('You can loot items in rooms by typing loot and give the items by typing give.')
+
+# Setting up player
+player = str(input('What is your name? '))
+print('Hello', player)
+
+# Dictionary of rooms
+rooms = {
+    # Podium is where you start and you cannot go outside unless you have a package and down is Midway
+    'Podium': {'up': 'Outside', 'down': 'Midway', 'exit': 'Exit'},
+
+    # Within Midway you can go left, right, up, or down freely into any dimension.
+    'Midway': {'left': 'Clothing Dimension', 'right': 'Sports Dimension', 'up': 'Podium',
+               'down': 'External Dimension', 'item': 'Passkey', 'exit': 'Exit'},
+
+    # From the Clothing Dimension you can go right or down only.
+    'Clothing Dimension': {'right': 'Midway', 'down': 'External Dimension', 'item': 'Warp Shirt', 'exit': 'Exit'},
+
+    # From the Sports Dimension you can go left or down only.
+    'Sports Dimension': {'left': 'Midway', 'down': 'External Dimension', 'item': 'Anti-grav Ball', 'exit': 'Exit'},
+
+    # External Dimension allows you to go left, right, up, or down freely.
+    'External Dimension': {'left': 'Clothing Dimension', 'right': 'Sports Dimension', 'up': 'Midway',
+                           'down': 'Underground Dimension', 'item': 'Crossbow', 'exit': 'Exit'},
+
+    # From the Underground Dimension you can go up or down freely.
+    'Underground Dimension': {'up': 'External Dimension', 'down': 'Packing Dimension', 'item': 'Periscope',
+                              'exit': 'Exit'},
+
+    # In the Packing Dimension you can only go back up.
+    'Packing Dimension': {'up': 'Underground Dimension', 'item': 'Powerbox', 'exit': 'Exit'},
+
+    # Once you go Outside you can not go anywhere else.
+    'Outside': {'give': 'Dragon', 'exit': 'Exit'},
+    'Exit': {}
+}
+
+# Inventory
+inventory = []
+
+# Movement will be taken in up, down, left, and right.
+# Current room will be Podium to start with.
+current_room = 'Podium'
+print('A red dragon with an enormous beehive haircut, sashayed on into the store. Her squinty eyes glaring '
+      'down at you, with a smug aura of condescension.')
+print('She saw you as a lesser being, a minimum wage worker, of a low skill job. She did not care for your well'
+      ' being, or emotional state.')
+print('"I, would like one of everything." She said, expecting you to crawl through every department, '
+      'and bring her an object from each one.')
+print('You are currently in:', current_room)
+print('Inventory:', inventory)
+print('Enter move:')
+
+# defining the movement
+move = input()
+
+# Mechanic for movement between rooms and exiting
+while current_room != 'Exit':
+
+    # moving between rooms
+    if move == 'up' or move == 'down' or move == 'left' or move == 'right':
+        if move in rooms[current_room]:
+            current_room = rooms[current_room][move]
+            print('You have entered:', current_room)
+            print('Inventory:', inventory)
+        else:
+            print('You do not wanna go there.')
+
+    # looting
+    elif move == 'loot':
+        if 'item' in rooms[current_room]:
+            inventory.append(rooms[current_room]['item'])
+            print('You have collected:', rooms[current_room]['item'])
+        else:
+            print('There is nothing to loot here.')
+
+    elif move == 'give':
+        if current_room == 'Outside':
+            if 'Passkey' and 'Crossbow' and 'Periscope' and 'Powerbox' and 'Warp Shirt' and \
+                    'Anti-grav Ball' in inventory:
+                print('She accepts the items with a huffed breath of impotent fire. "Took you long enough. Now validate my 2000 year old coupon so I do-" She stopped mid sentence. Looking into the box with a shine in her eyes.')
+                print('"Actually, I think you can go. I think, I have everything I need." She pulled a set of employee passes from the box.')
+                print('She pulled a set of employee passes from the box. Pushing them into the door slot, she gained full access to the store. Immediately taking control of everything. Not your problem though.')
+                print('Your shift was over. So you went home, and astral projected some dream games.')
+                quit()
+            else:
+                print('You present the dragon with the items that you have collected and she loots at them in discontent.')
+                print('She tells you that not all the items are in the box and she says she should have your head!')
+                print('The manager overhears this and fires you on the spot with the worst punishment possible.')
+                print('You are cast out into the void.')
+                quit()
+        else:
+            print('Nothing happened.')
+
+    # exiting the game
+    elif move == 'exit':
+        current_room = 'Exit'
+        if current_room == 'Exit':
+            print('Thank you for playing!')
+            quit()
+
+    # If the move is invalid
+    else:
+        print('Invalid move. Valid moves are up, down, left, right, loot, give, and exit.')
+
+    move = input()
